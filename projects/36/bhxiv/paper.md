@@ -22,6 +22,9 @@ authors:
   - name: Tiffany Callahan
     orcid: 0000-0002-8169-9049
     affiliation: 6
+  - name: Peter N Robinson
+    orcid: 0000-0002-0736-9199
+    affiliation: 7
 affiliations:
   - name: Human Genetics, Leiden University Medical Center, Leiden, Netherlands
     index: 1
@@ -35,6 +38,7 @@ affiliations:
     index: 5
   - name: Computational Bioscience Program, University of COlorado Anschutz Medical Campus, Aurora CO USA
     index: 6
+  - name: The Jackson Laboratory for Genomic Medicine, Farmington CT USA
 date: 11 November 2021
 cito-bibliography: paper.bib
 event: Barcelona2021
@@ -62,7 +66,7 @@ pasting above link (or yours) in
 -->
 
 # Introduction
-The COVID-19 crisis demonstrates a critical requirement for rapid and efficient sharing of data to facilitate the global response to this and future pandemics. We can address this challenge by making viral genomic and patient phenomic data FAIR, and formalising it to permit seamless data integration for facilitating data analysis. Phenopackets is a standard file format for sharing phenotypic information that facilitates communication within the research and clinical genomics communities (REF). The OMOP model allows for large-scale analysis of distributed data to generate evidence for research that promotes better health decisions and better care (REF). These gathered data is used by epidemiologists to monitor the infection, model it and make outbreak analysis and predictions to evaluate policy interventions. To harness Machine Learning and Artificial Intelligence approaches to discover meaningful patterns in epidemic outbreaks, we need to ensure that data are FAIR, i.e. data and metadata are accessible and actionable by machines. To leverage data for federated learning/analytics, datasets can be discovered in FAIR Data Points; FAIR data repositories that publish human- and machine-readable metadata for data resources. This project aims to enhance interoperability between health and research data by mapping Phenopackets and OMOP and representing COVID-19 metadata using the FAIR principles to enable discovery, integration and analysis of genotypic and phenotypic data.
+The COVID-19 crisis demonstrates a critical requirement for rapid and efficient sharing of data to facilitate the global response to this and future pandemics. We can address this challenge by making viral genomic and patient phenomic data FAIR, and formalising it to permit seamless data integration for facilitating data analysis. The GA4GH Phenopacket Schema is a standard file format for sharing phenotypic information that facilitates communication within the research and clinical genomics communities (REF). The OMOP model allows for large-scale analysis of distributed data to generate evidence for research that promotes better health decisions and better care (REF). These gathered data is used by epidemiologists to monitor the infection, model it and make outbreak analysis and predictions to evaluate policy interventions. To harness Machine Learning and Artificial Intelligence approaches to discover meaningful patterns in epidemic outbreaks, we need to ensure that data are FAIR, i.e. data and metadata are accessible and actionable by machines. To leverage data for federated learning/analytics, datasets can be discovered in FAIR Data Points; FAIR data repositories that publish human- and machine-readable metadata for data resources. This project aims to enhance interoperability between health and research data by mapping Phenopackets and OMOP and representing COVID-19 metadata using the FAIR principles to enable discovery, integration and analysis of genotypic and phenotypic data.
 
 
 <!--
@@ -74,10 +78,10 @@ In order to accomplish the mapping between OMOP CDR and Phenopackets the availab
 
 ### Population of OMOP CDR tables with synthetic patients data
 The process of populating the OMOP CDR tables of a database can roughly be divided into four steps: 
-1. Creation of patients data
+1. Creation of patient data
 2. Database deployment
-3. Vocabularies retrieval
-5. Transfer of patients data and vocabularies to DB
+3. Vocabulary retrieval
+5. Transfer of patient data and vocabularies to DB
 
 The choice of the tools needed to accomplish these tasks was facilitated by the familiarity of some group member with Synthea[^1], an open-source, synthetic patient generator. In fact, Synthea has an extension called ETL-Synthea[^2] that loads the data created by the former into a PostgreSQL database, set with OMOP CDR schema. 
 
@@ -126,15 +130,15 @@ volumes:
   db-data:
   pgadmin-data:
 ```
-The yaml contains the instructions to create the postgres container and a tool for administration connected to it. In order to generate the container:
+The yaml file contains the instructions for creating the postgres container and a tool for administration connected to it. In order to generate the container:
 ```
 docker-compose up
 ```
-Then after logging in to the administrattion tool at http://localhost:8081 it must be created a db called "synthea10" and inside it two schema named "cdm_synthea10" and "native".
+Then after logging in to the administrattion tool at http://localhost:8081 it must be created a db called "synthea10" and inside it two schemas named "cdm_synthea10" and "native".
 
 In the third step we chose the athena site[^4] to donwload the vocabularies. Accepting all the default vocabularies resulted in a zip file of over 4 GB and an error later in the fourth step. Reducing the vocabularies zip file dimension under 3 GB solved the issue.
 
-The next step is the actual population of the postgresql db just created with the synthetic data generated in the first step. The command to execute is:
+The next step is the actual population of the postgreSQL db just created with the synthetic data generated in the first step. The command to execute is:
 ```
 Rscript loader_all_master.r
 ```
